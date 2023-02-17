@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@kevinmarrec/nuxt-pwa": "^0.15.0",
+    "@nuxtjs/tailwindcss": "^6.2.0",
+    "@pinia-plugin-persistedstate/nuxt": "^1.0.0",
+    "nuxt": "3.0.0"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.4.6",
+    "daisyui": "^2.46.1",
+    "naive-ui": "^2.34.2",
+    "nuxt-graphql-client": "^0.2.23",
+    "pinia-plugin-persistedstate": "^3.0.1"
+  }
+}

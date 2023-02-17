@@ -1,0 +1,128 @@
+mutation addToCart($cartID: ID!, $lines: [CartLineInput!]!) {
+    cartLinesAdd(cartId: $cartID, lines: $lines) {
+        cart {
+            ...CartContent
+        }
+        userErrors {
+            field
+            message
+        }
+    }
+}
+
+mutation createCart {
+    cartCreate {
+        cart {
+            id
+            checkoutUrl
+            totalQuantity
+            lines(first: 50) {
+                nodes {
+                    id
+                    merchandise {
+                        ... on ProductVariant {
+                            product {
+                                id
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        userErrors {
+            field
+            message
+        }
+    }
+}
+
+mutation createBuyCart($lines: [CartLineInput!]!) {
+    cartCreate(input: {lines: $lines}) {
+        cart {
+            checkoutUrl
+        }
+    }
+}
+
+query getCart($cartId: ID!) {
+    cart(id: $cartId) {
+        ...CartContent
+    }
+}
+
+mutation changeLineQuantity($cartId: ID!, $lineId: ID!, $quantity: Int!) {
+    cartLinesUpdate(
+        cartId: $cartId
+        lines: {
+            id: $lineId
+            quantity: $quantity
+        }
+    ) {
+        cart {
+            ...CartContent
+        }
+    }
+}
+
+mutation removeLineFromCart($cartId: ID!, $lineId: ID!) {
+    cartLinesRemove(cartId: $cartId, lineIds: [$lineId]) {
+        cart {
+            ...CartContent
+        }
+    }
+}
+
+fragment CartContent on Cart {
+    checkoutUrl
+    totalQuantity
+    id
+    cost {
+        totalAmount {
+            amount
+            currencyCode
+        }
+    }
+    lines(first: 50) {
+        nodes {
+            id
+            quantity
+
+            cost {
+                totalAmount {
+                    amount
+                    currencyCode
+                }
+            }
+
+            merchandise {
+                ... on ProductVariant {
+                    id
+                    title
+                    price {
+                        amount
+                        currencyCode
+                    }
+                    product {
+                        title
+                        handle
+                        id
+                        images(first: 5) {
+                            edges {
+                                node {
+                                    cartUrl: url(transform: {
+                                        maxHeight: 140
+                                        maxWidth: 140,
+                                        crop: CENTER,
+                                        preferredContentType: WEBP
+                                    })
+                                }
+                            }
+                        }
+                    }
+                    quantityAvailable
+                }
+            }
+            
+        }
+    }
+}

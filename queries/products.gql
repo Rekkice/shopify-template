@@ -1,0 +1,178 @@
+query getProducts($numProducts: Int!, $cursorNext: String, $cursorPrev: String) {
+    products(sortKey: TITLE, first: $numProducts, after: $cursorNext, before: $cursorPrev, query: "available_for_sale:true") {
+        edges {
+            node {
+                handle
+                id
+                title
+                availableForSale
+                priceRange {
+                    minVariantPrice {
+                        amount
+                        currencyCode
+                    }
+                }
+                images(first: 15) {
+                    edges {
+                        node {
+                            url
+                            cardUrl: url(transform: {
+                                maxHeight: 300,
+                                maxWidth: 300,
+                                crop: CENTER,
+                                preferredContentType: WEBP
+                            })
+                        }
+                    }
+                }
+                variants(first: 5) {
+                    edges {
+                        node {
+                            id
+                            price {
+                                amount
+                                currencyCode
+                            }
+                            title
+                        }
+                    }
+                }
+            }
+        }
+        pageInfo {
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+        }
+    }
+}
+
+query getProductsFromCollection($numProducts: Int!, $handle: String, $cursorNext: String, $cursorPrev: String) {
+    collection(handle: $handle) {
+        products(sortKey: TITLE, first: $numProducts, after: $cursorNext, before: $cursorPrev, filters: { available: true }) {
+            edges {
+                node {
+                    handle
+                    id
+                    title
+                    availableForSale
+                    priceRange {
+                        minVariantPrice {
+                            amount
+                            currencyCode
+                        }
+                    }
+                    images(first: 15) {
+                        edges {
+                            node {
+                                url
+                                cardUrl: url(transform: {
+                                    maxHeight: 300,
+                                    maxWidth: 300,
+                                    crop: CENTER,
+                                    preferredContentType: WEBP
+                                })
+                            }
+                        }
+                    }
+                    variants(first: 5) {
+                        edges {
+                            node {
+                                id
+                                price {
+                                    amount
+                                    currencyCode
+                                }
+                                title
+                            }
+                        }
+                    }
+                }
+            }
+            pageInfo {
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+            }
+        }
+    }
+}
+
+query getProduct($handle: String!) {
+    product(handle: $handle) {
+        title
+        id
+        availableForSale
+        priceRange {
+            minVariantPrice {
+                amount
+                currencyCode
+            }
+        }
+        images(first: 15) {
+            edges {
+                node {
+                    pageUrl: url(transform: {
+                        maxHeight: 600
+                        maxWidth: 600,
+                        crop: CENTER,
+                        preferredContentType: WEBP
+                    })
+                }
+            }
+        }
+        collections(first: 1) {
+            edges {
+                node {
+                    title
+                }
+            }
+        }
+        variants(first: 5) {
+            edges {
+                node {
+                    id
+                    price {
+                        amount
+                        currencyCode
+                    }
+                    title
+                }
+            }
+        }
+        material: metafield(namespace: "custom", key: "materials") {
+            value
+        }
+        dimensions: metafield(namespace: "custom", key: "dimensions") {
+            value
+        }
+        descriptionHtml
+        description(truncateAt: 140)
+        totalInventory
+    }
+}
+
+query searchProducts($query: String!) {
+    products(query: $query, first: 10) {
+        edges {
+            node {
+                title
+                handle
+                images(first: 1) {
+                    edges {
+                        node {
+                            searchUrl: url(transform: {
+                                maxHeight: 50,
+                                maxWidth: 50,
+                                crop: CENTER,
+                                preferredContentType: WEBP
+                            })
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

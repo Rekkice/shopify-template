@@ -1,0 +1,10 @@
+query getCollections {
+    collections(first: 20) {
+        edges {
+            node {
+                title
+                handle
+            }
+        }
+    }
+}
